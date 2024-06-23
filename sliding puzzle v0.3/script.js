@@ -105,7 +105,7 @@ function start_game(){
                 e.preventDefault();    
                 if (play_permit){
                     move(e)
-                    moveEntireRows(e)
+                    moveEntireRowsOrColumn(e)
                     game_status()
                 }
                 if(parseInt(item.innerText)===parseInt(item.dataset.pos)+1){
@@ -122,21 +122,35 @@ window.onclick=()=>{
     game_status()
 }
 function move(e){
+    // the box u clicked is set to the first position
     var firstPos = parseInt(e.target.dataset.pos);
+    // the empty box is the box that has no image that empty space
     var empty = emptyItem
+    // just getting the data position of the empty element
     var secondPos = parseInt(empty.dataset.pos);
+    // the top box from the empty box will always be the data position of the empty element - the number of items in a row
+    // for example in a box of 3 items in a row and 3 items in a column total 9 element in the box including the empty element
+    // if the data position of the empty element is 5 that means it is the second element in the second row
+    // so the item at the top of the empty element will have a data position of 2 also 5 - 3=2
     let top = secondPos-divisor;
+    // same as the bottom 5 + 3 = 8 for a 3*3 box the data position of the item under the empty element will be 8
     let bottom = secondPos+divisor;
+    // no talking too much on the right and left please think
     let left = secondPos-1;
     let right = secondPos+1;
+    // so this is the condition if the empty element data position % 3 (in a 3*3 box) - bla bla bla 
+    // dont worry i will explain this one to you my self i no get strenght to type 
     if (secondPos%divisor-left%divisor < 1) {
         left = -1;
     }
     if (right%divisor-secondPos%divisor < 1) {
         right = -1;
     }
+    // okay here is where we push all the possibilites both the top ,left right and bottom 
     var posibilities = [left, right, top, bottom];  
+    // so if we click an element its data position so be either one of the posibilities for the sliding magic o happen 
     if (posibilities.includes(firstPos)) {
+        // so here is where we swap the two items data positions 
         empty.dataset.pos = firstPos;
         e.target.dataset.pos = secondPos;
         count++
@@ -150,17 +164,20 @@ function move(e){
         },450)
     }
 }
+function moveEntireRowsOrColumn(e){
+   null
+}
 let stable_items
 function game_status(){
     stable_items=document.querySelectorAll(".dd")
-    if (stable_items.length===endpoint-1) {
+    if (stable_items.length===endpoint-1) { 
         play_permit=false
         setTimeout(()=>{
             items[emptyIndex].classList.add("join")
             items[emptyIndex].innerHTML=""
             items[emptyIndex].style.backgroundImage =`url(./${path}/${endpoint}.png)`
             document.querySelector(".game ul").style="left:-2.5px; top:-2.5px;"
-            items[emptyIndex]``.style.zIndex="0"
+            items[emptyIndex].style.zIndex="0"
             for (let i=0; i<stable_items.length; i++){
                     stable_items[i].classList.add("join")
                     stable_items[i].innerHTML=""
@@ -169,13 +186,7 @@ function game_status(){
     }
 }
 
-function moveEntireRows(e){
-    let empty=items[emptyIndex].dataset.pos
-    let clickedItem=e.target.dataset.pos
-    let row_d=empty%4
-    let movement=[]
-    console.log(clickedItem-row_d )
-}
+
 function reload(){
     window.location.reload()
 }
