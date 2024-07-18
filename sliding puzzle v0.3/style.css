@@ -9,14 +9,19 @@
     font-family:font;
     src:url(font.ttf);
 }
+body,html{
+   height:100%;
+   overscroll-behavior: none;
+}
 body{
-    height: 100vh;
+    
     width: 100%;
     display:flex;
     justify-content:center;
     align-items:center;
     background :#325872;
     position: relative;
+ 
 }
 .holder{
     position:fixed;
